@@ -1,1 +1,1 @@
-# csgo
+# CSGO Docker Container
