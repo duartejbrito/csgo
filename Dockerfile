@@ -10,6 +10,7 @@ ENV STEAMDIR=/home/steam \
     STEAMAPPID=740
 
 RUN set -x \
+    && useradd -u $PUID -m steam \
     && apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
         lib32stdc++6=8.3.0-6 \
@@ -17,34 +18,16 @@ RUN set -x \
         wget=1.20.1-1.1 \
         ca-certificates=20190110 \
         lib32z1 \
-    && useradd -u $PUID -m steam \
     && su steam -c \
         "mkdir -p ${STEAMCMDDIR} \
         && cd ${STEAMCMDDIR} \
         && wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
     && mkdir -p ${STEAMDIR}/.steam/sdk32 \
     && ln -s ${STEAMCMDDIR}/linux32/steamclient.so ${STEAMDIR}/.steam/sdk32/steamclient.so \
+    && mkdir -p ${STEAMDIR} \
     && cd ${STEAMDIR} \
     && wget https://raw.githubusercontent.com/duartejbrito/csgo/master/root/entrypoint.sh \
-    && chmod 755 ${STEAMDIR}/entrypoint.sh \
-    && mkdir -p ${STEAMAPPDIR}/csgo \
-    && cd ${STEAMAPPDIR}/csgo \
-    && { \
-        echo '@ShutdownOnFailedCommand 1'; \
-        echo '@NoPromptForPassword 1'; \
-        echo 'login anonymous'; \
-        echo 'force_install_dir ${STEAMAPPDIR}'; \
-        echo 'app_update ${STEAMAPPID}'; \
-        echo 'quit'; \
-    } > ${STEAMAPPDIR}/csgo_update.txt \
-    && wget -qO- https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-linux.tar.gz | tar xvzf - \
-    && wget -qO- https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6454-linux.tar.gz | tar xvzf - \
-    && chown -R steam:steam ${STEAMAPPDIR} \
-    && apt-get remove --purge -y \
-        wget \
-    && apt-get clean autoclean \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
+    && chmod 755 ${STEAMDIR}/entrypoint.sh 
 
 ENV SRCDS_FPSMAX=300 \
     SRCDS_TICKRATE=128 \
@@ -66,9 +49,9 @@ ENV SRCDS_FPSMAX=300 \
 
 USER steam
 
-WORKDIR $STEAMAPPDIR
+WORKDIR $STEAMCMDDIR
 
-VOLUME $STEAMCMDDIR $STEAMAPPDIR
+VOLUME $STEAMAPPDIR
 
 ENTRYPOINT ${STEAMDIR}/entrypoint.sh
 

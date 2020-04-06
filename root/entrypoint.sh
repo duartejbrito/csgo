@@ -1,8 +1,49 @@
   
 #!/bin/bash
 
+set -x
+
+echo "[SYTER/CSGO]: START ENTRYPOINT"
+
+mkdir -p ${STEAMAPPDIR}/csgo
+
+cd ${STEAMAPPDIR}/csgo
+
+echo "[SYTER/CSGO]: CREATE csgo_update.txt"
+{ \
+	echo '@ShutdownOnFailedCommand 1'; \
+	echo '@NoPromptForPassword 1'; \
+	echo 'login anonymous'; \
+	echo 'force_install_dir ${STEAMAPPDIR}'; \
+	echo 'app_update ${STEAMAPPID}'; \
+	echo 'quit'; \
+} > ${STEAMAPPDIR}/csgo_update.txt
+echo "[SYTER/CSGO]: CREATED csgo_update.txt"
+
+echo "[SYTER/CSGO]: ADD PLUGINS"
+wget -qO- https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-linux.tar.gz | tar xvzf -
+
+wget -qO- https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6454-linux.tar.gz | tar xvzf -
+echo "[SYTER/CSGO]: ADDED PLUGINS"
+
+
+chown -R steam:steam ${STEAMAPPDIR}
+
+echo "[SYTER/CSGO]: START CLEAN"
+apt-get remove --purge -y \
+	wget
+apt-get clean autoclean
+apt-get autoremove -y
+rm -rf /var/lib/apt/lists/*
+echo "[SYTER/CSGO]: END CLEAN"
+
+
+echo "[SYTER/CSGO]: START UPDATE"
 ${STEAMCMDDIR}/steamcmd.sh +login anonymous +force_install_dir ${STEAMAPPDIR} +app_update ${STEAMAPPID} +quit
+echo "[SYTER/CSGO]: END UPDATE"
+
+echo "[SYTER/CSGO]: END ENTRYPOINT"
 
 ${STEAMAPPDIR}/srcds_run -game csgo -console -autoupdate -steam_dir ${STEAMCMDDIR} -steamcmd_script ${STEAMAPPDIR}/csgo_update.txt -usercon +fps_max $SRCDS_FPSMAX \
-			-tickrate $SRCDS_TICKRATE -port $SRCDS_PORT +tv_port $SRCDS_TV_PORT +clientport $SRCDS_CLIENT_PORT -maxplayers_override $SRCDS_MAXPLAYERS +game_type $SRCDS_GAMETYPE +game_mode $SRCDS_GAMEMODE \
-			+mapgroup $SRCDS_MAPGROUP +map $SRCDS_STARTMAP +sv_setsteamaccount $SRCDS_TOKEN +rcon_password $SRCDS_RCONPW +sv_password $SRCDS_PW +sv_region $SRCDS_REGION
+	-tickrate $SRCDS_TICKRATE -port $SRCDS_PORT +tv_port $SRCDS_TV_PORT +clientport $SRCDS_CLIENT_PORT -maxplayers_override $SRCDS_MAXPLAYERS +game_type $SRCDS_GAMETYPE +game_mode $SRCDS_GAMEMODE \
+	+mapgroup $SRCDS_MAPGROUP +map $SRCDS_STARTMAP +sv_setsteamaccount $SRCDS_TOKEN +rcon_password $SRCDS_RCONPW +sv_password $SRCDS_PW +sv_region $SRCDS_REGION
