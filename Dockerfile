@@ -9,7 +9,7 @@ ENV STEAMDIR=/home/steam \
     STEAMAPPDIR=/home/steam/csgo-dedicated \
     STEAMAPPID=740
 
-RUN set -xo pipefail \
+RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
 		lib32stdc++6=8.3.0-6 \
