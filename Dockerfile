@@ -22,6 +22,9 @@ RUN set -x \
 		"mkdir -p ${STEAMCMDDIR} \
 		&& cd ${STEAMCMDDIR} \
 		&& wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
+    && cd ${STEAMDIR} \
+	&& wget https://raw.githubusercontent.com/duartejbrito/csgo/master/root/entrypoint.sh \
+	&& chmod 755 ${STEAMDIR}/entrypoint.sh \
     && mkdir -p ${STEAMAPPDIR}/csgo \
     && cd ${STEAMAPPDIR}/csgo \
 	&& { \
@@ -55,8 +58,6 @@ ENV SRCDS_FPSMAX=300 \
 	SRCDS_MAPGROUP="mg_active" \
 	SRCDS_GAMETYPE=0 \
 	SRCDS_GAMEMODE=1
-
-COPY --chown=steam:steam root ${STEAMDIR}/
 
 USER steam
 
