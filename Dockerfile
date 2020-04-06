@@ -4,11 +4,12 @@ LABEL maintainer="sytertzp@gmail.com"
 
 ARG PUID=1000
 
-ENV STEAMCMDDIR=/home/steam/steamcmd \
+ENV STEAMDIR=/home/steam \
+    STEAMCMDDIR=/home/steam/steamcmd \
     STEAMAPPDIR=/home/steam/csgo-dedicated \
     STEAMAPPID=740
 
-RUN set -x \
+RUN set -xo pipefail \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
 		lib32stdc++6=8.3.0-6 \
@@ -63,6 +64,6 @@ WORKDIR $STEAMAPPDIR
 
 VOLUME $STEAMCMDDIR $STEAMAPPDIR
 
-ENTRYPOINT ${STEAMAPPDIR}/entrypoint.sh
+ENTRYPOINT ${STEAMDIR}/entrypoint.sh
 
 EXPOSE 27015/tcp 27015/udp 27020/udp
