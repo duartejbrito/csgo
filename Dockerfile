@@ -4,9 +4,9 @@ LABEL maintainer="sytertzp@gmail.com"
 
 ARG PUID=1000
 
-ENV STEAMCMDDIR /home/steam/steamcmd \
-    STEAMAPPDIR /home/steam/csgo-dedicated \
-    STEAMAPPID 740
+ENV STEAMCMDDIR=/home/steam/steamcmd \
+    STEAMAPPDIR=/home/steam/csgo-dedicated \
+    STEAMAPPID=740
 
 RUN set -x \
 	&& apt-get update \
