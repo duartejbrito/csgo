@@ -23,11 +23,7 @@ RUN set -x \
         && cd ${STEAMCMDDIR} \
         && wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
     && mkdir -p ${STEAMDIR}/.steam/sdk32 \
-    && ln -s ${STEAMCMDDIR}/linux32/steamclient.so ${STEAMDIR}/.steam/sdk32/steamclient.so \
-    && mkdir -p ${STEAMDIR} \
-    && cd ${STEAMDIR} \
-    && wget https://raw.githubusercontent.com/duartejbrito/csgo/master/root/entrypoint.sh \
-    && chmod 755 ${STEAMDIR}/entrypoint.sh 
+    && ln -s ${STEAMCMDDIR}/linux32/steamclient.so ${STEAMDIR}/.steam/sdk32/steamclient.so
 
 ENV SRCDS_FPSMAX=300 \
     SRCDS_TICKRATE=128 \
@@ -47,12 +43,11 @@ ENV SRCDS_FPSMAX=300 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
+COPY root ${STEAMDIR}/
+RUN chown -R steam:steam ${STEAMDIR}
+
 USER steam
-
 WORKDIR $STEAMCMDDIR
-
 VOLUME $STEAMAPPDIR
-
 ENTRYPOINT ${STEAMDIR}/entrypoint.sh
-
 EXPOSE 27015/tcp 27015/udp 27020/udp
