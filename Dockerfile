@@ -23,7 +23,7 @@ RUN set -x \
     && mkdir -p ${STEAMAPPDIR}/csgo \
     && cd ${STEAMAPPDIR} \
 	&& wget https://raw.githubusercontent.com/duartejbrito/csgo/master/entrypoint.sh \
-	&& chmod 755 ${STEAMAPPDIR}/entry.sh \
+	&& chmod 755 ${STEAMAPPDIR}/entrypoint.sh \
     && cd ${STEAMAPPDIR}/csgo \
 	&& { \
 			echo '@ShutdownOnFailedCommand 1'; \
