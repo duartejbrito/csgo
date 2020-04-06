@@ -56,7 +56,7 @@ ENV SRCDS_FPSMAX=300 \
 	SRCDS_GAMETYPE=0 \
 	SRCDS_GAMEMODE=1
 
-COPY --chown=steam:steam root ${STEAMAPPDIR}/
+COPY --chown=steam:steam root ${STEAMDIR}/
 
 USER steam
 
