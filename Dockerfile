@@ -23,7 +23,7 @@ RUN set -x \
         && cd ${STEAMCMDDIR} \
         && wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
     && mkdir -p ${STEAMDIR}/.steam/sdk32 \
-    && ln -s ${STEAMDIR}/linux32/steamclient.so ${STEAMDIR}/.steam/sdk32/steamclient.so \
+    && ln -s ${STEAMCMDDIR}/linux32/steamclient.so ${STEAMDIR}/.steam/sdk32/steamclient.so \
     && cd ${STEAMDIR} \
     && wget https://raw.githubusercontent.com/duartejbrito/csgo/master/root/entrypoint.sh \
     && chmod 755 ${STEAMDIR}/entrypoint.sh \
