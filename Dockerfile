@@ -4,9 +4,9 @@ LABEL maintainer="sytertzp@gmail.com"
 
 ARG PUID=1000
 
-ENV STEAMCMDDIR /home/steam/steamcmd
-ENV STEAMAPPID 740
-ENV STEAMAPPDIR /home/steam/csgo-dedicated
+ENV STEAMCMDDIR /home/steam/steamcmd \
+    STEAMAPPDIR /home/steam/csgo-dedicated \
+    STEAMAPPID 740
 
 RUN set -x \
 	&& apt-get update \
@@ -15,6 +15,7 @@ RUN set -x \
 		lib32gcc1=1:8.3.0-6 \
 		wget=1.20.1-1.1 \
 		ca-certificates=20190110 \
+        lib32z1 \
 	&& useradd -u $PUID -m steam \
 	&& su steam -c \
 		"mkdir -p ${STEAMCMDDIR} \
@@ -61,8 +62,7 @@ USER steam
 
 WORKDIR $STEAMAPPDIR
 
-VOLUME $STEAMCMDDIR
-VOLUME $STEAMAPPDIR
+VOLUME $STEAMCMDDIR $STEAMAPPDIR
 
 ENTRYPOINT ${STEAMAPPDIR}/entrypoint.sh
 
