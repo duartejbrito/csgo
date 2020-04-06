@@ -22,7 +22,6 @@ RUN set -x \
 		&& cd ${STEAMCMDDIR} \
 		&& wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
     && mkdir -p ${STEAMAPPDIR}/csgo \
-	&& chmod 755 ${STEAMAPPDIR}/entrypoint.sh \
     && cd ${STEAMAPPDIR}/csgo \
 	&& { \
 			echo '@ShutdownOnFailedCommand 1'; \
@@ -56,7 +55,7 @@ ENV SRCDS_FPSMAX=300 \
 	SRCDS_GAMETYPE=0 \
 	SRCDS_GAMEMODE=1
 
-COPY --chown=steam:steam entrypoint.sh ${STEAMAPPDIR}/entrypoint.sh
+COPY --chown=steam:steam root ${STEAMAPPDIR}/
 
 USER steam
 
